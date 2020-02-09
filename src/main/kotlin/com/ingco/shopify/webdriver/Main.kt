@@ -1,16 +1,15 @@
 package com.ingco.shopify.webdriver
 
+import com.ingco.shopify.config.loadConfig
+import com.ingco.shopify.config.shopify
 import com.natpryce.konfig.ConfigurationProperties
 import org.openqa.selenium.By.xpath
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.WebDriverWait
-import java.io.File
 import java.util.concurrent.TimeUnit.SECONDS
 
 fun main() {
-    val config = ConfigurationProperties.fromFile(
-        File("src/main/resources/shopify.properties")
-    )
+    val config = loadConfig()
 
     val driver = chromeDriver()
     login(driver, config)
