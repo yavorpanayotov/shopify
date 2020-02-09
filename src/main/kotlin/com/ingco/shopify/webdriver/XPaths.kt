@@ -1,4 +1,4 @@
-package com.ingco.shopify
+package com.ingco.shopify.webdriver
 
 const val SHOPIFY_COM = "http://www.shopify.com"
 const val LOGIN = "//a[@href='/login']"
