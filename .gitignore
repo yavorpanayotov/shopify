@@ -1,3 +1,2 @@
 src/main/resources/*.properties
 *.txt
-/src/main/resources/industrial-products.txt
