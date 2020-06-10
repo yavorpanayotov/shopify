@@ -2,7 +2,6 @@ package com.ingco.shopify.api
 
 import com.ingco.shopify.config.loadConfig
 import com.ingco.shopify.config.shopify
-import java.io.File
 
 fun main() {
     val productStore = ProductStore.init()
@@ -17,4 +16,4 @@ fun main() {
         .forEach { addTagsProductFunction.apply("индустриален", it) }
 }
 
-fun industrialProductCodes(): List<String> = File(ProductStore.javaClass::class.java.getResource("/industrial-products.txt").file).readLines()
+fun industrialProductCodes(): List<String> = readLines("industrial-products.txt")
