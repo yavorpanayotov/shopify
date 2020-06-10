@@ -14,7 +14,7 @@ class ProductStore(private val storeAddress: String, private val apiCredentials:
 
     fun size(): Int = products.size
 
-    private fun init() {
+    fun init() {
         val (request, response, result) = "https://$storeAddress/admin/api/2020-04/products.json"
             .httpGet(listOf("limit" to "250"))
             .header(headers())
