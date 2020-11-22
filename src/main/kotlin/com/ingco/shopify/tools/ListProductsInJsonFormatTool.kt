@@ -1,7 +1,9 @@
-package com.ingco.shopify.api
+package com.ingco.shopify.tools
 
 import argo.format.PrettyJsonFormatter
 import argo.jdom.JsonNodeFactories.*
+import com.ingco.shopify.api.ProductStore
+import com.ingco.shopify.api.productCode
 import kotlin.streams.toList
 
 fun main() {

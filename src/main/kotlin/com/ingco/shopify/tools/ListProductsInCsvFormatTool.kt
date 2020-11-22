@@ -1,18 +1,21 @@
-package com.ingco.shopify.api
+package com.ingco.shopify.tools
 
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
+import com.ingco.shopify.api.ProductStore
+import com.ingco.shopify.api.productCode
 import kotlin.streams.toList
 
 fun main() {
     val productStore = ProductStore.init()
 
-    val productsInfo: List<Item> = productStore.products()
+    val productsInfo = productStore.products()
         .map { it.getStringValue("handle") to it }
         .map { productCode(it.first) to it.second }
         .map { (productCode, data) ->
             val variant = data.getArrayNode("variants").get(0)
             val images = data.getArrayNode("images")
 
-            Item(
+            listOf(
                 productCode,
                 data.getStringValue("title"),
                 data.getStringValue("body_html").replace(Regex("<.*?>\n?"), ""),
@@ -22,17 +25,6 @@ fun main() {
             )
         }
 
-//    val xmlMapper = XmlMapper()
-//    xmlMapper.enable(SerializationFeature.INDENT_OUTPUT)
-//    println(xmlMapper.writeValueAsString(productsInfo))
+    val data = listOf(listOf("sku", "name", "description", "price", "main_image", "additional_images")) + productsInfo
+    csvWriter().open("all_products.csv") { writeAll(data) }
 }
-
-data class Item(
-    val productCode: String,
-    val title: String,
-    val description: String,
-    val price: String,
-    val main_image: String,
-    val all_images: List<String>
-)
-

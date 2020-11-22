@@ -1,5 +1,8 @@
-package com.ingco.shopify.api
+package com.ingco.shopify.tools
 
+import com.ingco.shopify.api.ProductStore
+import com.ingco.shopify.api.functions.AddTagsProductFunction
+import com.ingco.shopify.api.readLines
 import com.ingco.shopify.config.loadConfig
 import com.ingco.shopify.config.shopify
 

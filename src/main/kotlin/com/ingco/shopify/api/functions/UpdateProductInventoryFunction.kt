@@ -1,4 +1,4 @@
-package com.ingco.shopify.api
+package com.ingco.shopify.api.functions
 
 import argo.format.PrettyJsonFormatter
 import argo.jdom.JdomParser
