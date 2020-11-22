@@ -6,6 +6,8 @@ import argo.jdom.JsonNodeFactories.`object`
 import argo.jdom.JsonNodeFactories.field
 import com.github.kittinunf.fuel.httpPut
 import com.github.kittinunf.result.Result
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class SetProductPriceFunction(val storeAddress: String, val apiCredentials: String) {
 
@@ -14,9 +16,12 @@ class SetProductPriceFunction(val storeAddress: String, val apiCredentials: Stri
             `object`(
                 field(
                     "variant", `object`(
+
+
                         field("id", JsonNodeFactories.number(id)),
-                        field("price", JsonNodeFactories.string(price)),
-                        field("compare_at_price", JsonNodeFactories.nullNode())
+                        field("price", JsonNodeFactories.string(BigDecimal(price).multiply(BigDecimal("0.8")).setScale(2, RoundingMode.HALF_UP).toPlainString())),
+                        field("compare_at_price", JsonNodeFactories.string(price))
+                        //field("compare_at_price", JsonNodeFactories.nullNode())
                     )
                 )
             )
@@ -38,7 +43,7 @@ class SetProductPriceFunction(val storeAddress: String, val apiCredentials: Stri
                 println(result.getException())
             }
             is Result.Success -> {
-                print("$productCode price updated $price,   ")
+                println("$productCode price updated $price")
             }
         }
     }

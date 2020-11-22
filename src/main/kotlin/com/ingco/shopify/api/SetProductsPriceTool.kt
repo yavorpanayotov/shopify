@@ -6,7 +6,6 @@ import com.ingco.shopify.config.shopify
 fun main() {
     val config = loadConfig()
     val setProductPriceFunction = SetProductPriceFunction(config[shopify.fullStoreUrl], config[shopify.apiCredentials])
-    val updateProductInventoryFunction = UpdateProductInventoryFunction(config[shopify.fullStoreUrl], config[shopify.apiCredentials])
 
     val productStore = ProductStore.init()
     val handles = productStore.products().map { it.getStringValue("handle") }
@@ -31,7 +30,7 @@ fun main() {
             )
         }.forEach { (productCode, id, price, inventoryItemId, quantity) ->
             setProductPriceFunction.apply(productCode, id, price)
-            updateProductInventoryFunction.apply(inventoryItemId, quantity)
+            //updateProductInventoryFunction.apply(inventoryItemId, quantity)
         }
 }
 
@@ -54,5 +53,5 @@ fun allProductCodesToPrices(): Set<Triple<String, String, String>> =
     readLines("all-products.txt")
         .map {
             val array = it.split(",")
-            Triple(array[0], array[1], array[2])
+            Triple(array[0], array[1].trim(), "0")
         }.toSet()
