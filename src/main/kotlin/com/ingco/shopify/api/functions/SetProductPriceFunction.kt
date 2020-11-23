@@ -11,17 +11,15 @@ import java.math.RoundingMode
 
 class SetProductPriceFunction(val storeAddress: String, val apiCredentials: String) {
 
-    fun apply(productCode: String, id: String, price: String) {
+    fun apply(productCode: String, id: String, price: String, compareAtPrice: String) {
         val body = PrettyJsonFormatter().format(
             `object`(
                 field(
                     "variant", `object`(
 
-
                         field("id", JsonNodeFactories.number(id)),
                         field("price", JsonNodeFactories.string(BigDecimal(price).multiply(BigDecimal("0.8")).setScale(2, RoundingMode.HALF_UP).toPlainString())),
-                        field("compare_at_price", JsonNodeFactories.string(price))
-                        //field("compare_at_price", JsonNodeFactories.nullNode())
+                        field("compare_at_price", JsonNodeFactories.string(compareAtPrice))
                     )
                 )
             )
