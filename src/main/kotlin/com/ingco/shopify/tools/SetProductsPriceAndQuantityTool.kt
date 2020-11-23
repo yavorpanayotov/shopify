@@ -44,7 +44,7 @@ fun main() {
 
             setProductPriceFunction.apply(productCode, variantId, newPrice ?: currentPrice, compareAtPrice)
 
-            newQuantity?.let { updateProductInventoryFunction.apply(inventoryItemId, it) }
+            newQuantity?.let { updateProductInventoryFunction.apply(productCode, inventoryItemId, it) }
         }
 }
 

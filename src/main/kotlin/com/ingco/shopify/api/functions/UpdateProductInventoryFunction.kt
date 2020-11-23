@@ -11,7 +11,7 @@ import com.github.kittinunf.result.Result
 
 class UpdateProductInventoryFunction(val storeAddress: String, val apiCredentials: String) {
 
-    fun apply(inventoryItemId: String, quantity: String) {
+    fun apply(productCode: String, inventoryItemId: String, quantity: String) {
         val (request, response, result) = "https://$storeAddress/admin/api/2020-04/inventory_levels.json"
             .httpGet(listOf("inventory_item_ids" to inventoryItemId))
             .header(
@@ -49,7 +49,7 @@ class UpdateProductInventoryFunction(val storeAddress: String, val apiCredential
                         println(result.getException())
                     }
                     is Result.Success -> {
-                        println("quantity updated $quantity")
+                        println("$productCode new quantity $quantity")
                     }
                 }
             }

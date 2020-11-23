@@ -37,7 +37,7 @@ class SetProductPriceFunction(val storeAddress: String, val apiCredentials: Stri
                 println(result.getException())
             }
             is Result.Success -> {
-                println("$productCode price updated $price")
+                println("$productCode new price $price, compare at price $compareAtPrice")
             }
         }
     }
