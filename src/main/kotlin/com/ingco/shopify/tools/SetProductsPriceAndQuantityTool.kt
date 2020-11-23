@@ -21,7 +21,8 @@ fun main() {
 
     allProductCodesToPrices()
         .map { (productCode, newPrice, newQuantity) ->
-            val data = productCodeToData.firstOrNull { it.first == productCode }?.second ?: throw IllegalArgumentException("$productCode not found")
+            val data = productCodeToData.firstOrNull { it.first == productCode }?.second
+                ?: throw IllegalArgumentException("$productCode not found")
 
             val variantNode = data.getArrayNode("variants")[0]
 
