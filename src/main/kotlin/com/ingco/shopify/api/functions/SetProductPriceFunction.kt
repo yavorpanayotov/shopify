@@ -1,13 +1,9 @@
 package com.ingco.shopify.api.functions
 
 import argo.format.PrettyJsonFormatter
-import argo.jdom.JsonNodeFactories
-import argo.jdom.JsonNodeFactories.`object`
-import argo.jdom.JsonNodeFactories.field
+import argo.jdom.JsonNodeFactories.*
 import com.github.kittinunf.fuel.httpPut
 import com.github.kittinunf.result.Result
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 class SetProductPriceFunction(val storeAddress: String, val apiCredentials: String) {
 
@@ -17,9 +13,9 @@ class SetProductPriceFunction(val storeAddress: String, val apiCredentials: Stri
                 field(
                     "variant", `object`(
 
-                        field("id", JsonNodeFactories.number(id)),
-                        field("price", JsonNodeFactories.string(BigDecimal(price).multiply(BigDecimal("0.8")).setScale(2, RoundingMode.HALF_UP).toPlainString())),
-                        field("compare_at_price", JsonNodeFactories.string(compareAtPrice))
+                        field("id", number(id)),
+                        field("price", string(price)),
+                        field("compare_at_price", string(compareAtPrice))
                     )
                 )
             )
