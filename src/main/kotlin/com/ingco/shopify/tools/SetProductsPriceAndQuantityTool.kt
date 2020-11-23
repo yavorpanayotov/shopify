@@ -9,6 +9,8 @@ import com.ingco.shopify.config.loadConfig
 import com.ingco.shopify.config.shopify
 
 fun main() {
+    throw IllegalStateException("you sure?")
+
     val config = loadConfig()
     val setProductPriceFunction = SetProductPriceFunction(config[shopify.fullStoreUrl], config[shopify.apiCredentials])
     val updateProductInventoryFunction = UpdateProductInventoryFunction(config[shopify.fullStoreUrl], config[shopify.apiCredentials])

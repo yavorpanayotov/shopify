@@ -7,6 +7,7 @@ import com.ingco.shopify.config.loadConfig
 import com.ingco.shopify.config.shopify
 
 fun main() {
+    throw IllegalStateException("you sure?")
     val productStore = ProductStore.init()
 
     val config = loadConfig()
