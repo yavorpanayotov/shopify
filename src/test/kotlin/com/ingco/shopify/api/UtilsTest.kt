@@ -25,14 +25,16 @@ internal class UtilsTest {
         "потопяема-помпа-с-поплавък-ingco-spd7501-750w-13000л-час, spd7501",
         "поялник-за-полипропиленови-тръби-ingco-ptwt215002-800w-1500w, ptwt215002",
         "комплект-звездогаечни-ключове-8-броя-ingco-hkspa1088-i, hkspa1088-i",
-        "ексцентър-шлайф-ingco-rs4501-2-450w, rs4501-2", //review
+        "ексцентър-шлайф-ingco-rs4501-2-450w, rs4501.2",
         "комплект-ударни-вложки-10-броя-ingco-hkissd12101-1-2, hkissd12101",
         "литиево-йонна-батерия-ingco-fbli12151-1-5ah, fbli12151",
         "работни-ръкавици-ingco-hgcg01-xl, hgcg01-xl",
         "ротационен-перфоратор-ingco-rgh9018-2, rgh9018-2",
         "ротационен-перфоратор-ingco-rgh9028-800w, rgh9028",
         "ротационен-перфоратор-ingco-rgh9028-2-800w, rgh9028-2",
-        "ъглошлайф-ingco-ag8006-2, ag8006-2"
+        "ъглошлайф-ingco-ag8006-2, ag8006-2",
+        "ротационен-перфоратор-sds-max-ingco-rh16008, rh16008",
+        "зарядно-устройство-ingco-ing-cb1601, ing-cb1601"
     )
     fun `extracts product code from handle`(handle: String, expectedProductCode: String) {
         assertThat(productCode(handle)).isEqualTo(expectedProductCode)

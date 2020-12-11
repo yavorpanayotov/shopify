@@ -8,6 +8,9 @@ fun productCode(handle: String): String {
     val parts = handle.split("-")
     val handleStart = parts.indexOf("ingco") + 1
 
+    if (parts.contains("rs4501")) return "rs4501.2"
+    if (parts[handleStart] == "ing") return "${parts[handleStart]}-${parts[handleStart + 1]}"
+
     if (hasMoreThanTwoParts(handleStart, parts)
         && (
                 nextTwoPartsAreSingleChars(parts, handleStart)
@@ -19,7 +22,6 @@ fun productCode(handle: String): String {
     if (hasMoreThanOnePart(handleStart, parts)
         && (
                 nextPartIsSingleChar(parts, handleStart)
-                        || nextPartStartsWithMma(parts, handleStart)
                         || nextPartIsXl(parts, handleStart))
     ) {
         return parts.subList(handleStart, handleStart + 2).joinToString("-")
@@ -33,8 +35,6 @@ private fun hasMoreThanOnePart(handleStart: Int, parts: List<String>) = handleSt
 private fun hasMoreThanTwoParts(handleStart: Int, parts: List<String>) = handleStart < parts.size - 2
 
 private fun secondPartShouldBeExcluded(parts: List<String>, handleStart: Int) = parts[handleStart + 2].endsWith("ah")
-
-private fun nextPartStartsWithMma(parts: List<String>, handleStart: Int) = parts[handleStart + 1].startsWith("mma")
 
 private fun nextPartIsSingleChar(parts: List<String>, handleStart: Int) = parts[handleStart + 1].length == 1
 

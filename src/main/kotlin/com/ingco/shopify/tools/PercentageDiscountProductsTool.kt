@@ -35,6 +35,6 @@ fun main() {
         }
 }
 
-fun discount(value: String, discountFactor: BigDecimal): String {
+private fun discount(value: String, discountFactor: BigDecimal): String {
     return BigDecimal(value).multiply(discountFactor).setScale(2, HALF_UP).toPlainString()
 }

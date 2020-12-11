@@ -64,7 +64,7 @@ data class ProductUpdate(
     val newQuantity: String?
 )
 
-fun allProductCodesToPrices(): Set<ProductUpdate> =
+private fun allProductCodesToPrices(): Set<ProductUpdate> =
     readLines("all-products-with-prices.txt")
         .drop(1)
         .map {
