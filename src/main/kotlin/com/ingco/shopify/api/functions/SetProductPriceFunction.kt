@@ -7,7 +7,7 @@ import com.github.kittinunf.result.Result
 
 class SetProductPriceFunction(val storeAddress: String, val apiCredentials: String) {
 
-    fun apply(productCode: String, id: String, price: String, compareAtPrice: String) {
+    fun apply(productCode: String, id: String, price: String, compareAtPrice: String?) {
         val body = PrettyJsonFormatter().format(
             `object`(
                 field(
@@ -15,7 +15,7 @@ class SetProductPriceFunction(val storeAddress: String, val apiCredentials: Stri
 
                         field("id", number(id)),
                         field("price", string(price)),
-                        field("compare_at_price", string(compareAtPrice))
+                        field("compare_at_price", compareAtPrice?.let { string(it) } ?: nullNode())
                     )
                 )
             )

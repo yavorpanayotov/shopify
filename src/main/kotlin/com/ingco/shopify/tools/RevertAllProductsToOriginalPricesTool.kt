@@ -7,7 +7,6 @@ import com.ingco.shopify.config.loadConfig
 import com.ingco.shopify.config.shopify
 
 fun main() {
-    throw IllegalStateException("you sure?")
 
     val config = loadConfig()
     val setProductPriceFunction = SetProductPriceFunction(config[shopify.fullStoreUrl], config[shopify.apiCredentials])
@@ -19,14 +18,19 @@ fun main() {
         .forEach { (productCode, data) ->
             val variantNode = data.getArrayNode("variants")[0]
 
-            val compareAtPrice = variantNode.getStringValue("compare_at_price")
-            println("rev. $productCode from ${variantNode.getStringValue("price")} to $compareAtPrice")
+            val compareAtPrice = variantNode.getNullableStringValue("compare_at_price")
 
-            setProductPriceFunction.apply(
-                productCode,
-                variantNode.getNumberValue("id"),
-                compareAtPrice,
-                compareAtPrice
-            )
+            if (compareAtPrice != null) {
+                println("rev. $productCode from ${variantNode.getStringValue("price")} to $compareAtPrice")
+
+                setProductPriceFunction.apply(
+                    productCode,
+                    variantNode.getNumberValue("id"),
+                    compareAtPrice,
+                    null
+                )
+            } else {
+                println("skipping $productCode")
+            }
         }
 }

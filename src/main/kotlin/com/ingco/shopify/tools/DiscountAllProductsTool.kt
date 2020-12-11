@@ -30,7 +30,7 @@ fun main() {
                 productCode,
                 variantNode.getNumberValue("id"),
                 newPrice,
-                variantNode.getStringValue("compare_at_price")
+                currentPrice
             )
         }
 }
