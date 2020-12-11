@@ -10,7 +10,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode.HALF_UP
 
 fun main() {
-//    throw IllegalStateException("you sure?")
+    throw IllegalStateException("you sure?")
 
     val config = loadConfig()
     val setProductPriceFunction = SetProductPriceFunction(config[shopify.fullStoreUrl], config[shopify.apiCredentials])
