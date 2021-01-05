@@ -7,7 +7,8 @@ import com.ingco.shopify.api.readLines
 import com.ingco.shopify.config.loadConfig
 import com.ingco.shopify.config.shopify
 import java.math.BigDecimal
-import java.math.RoundingMode.HALF_UP
+import java.math.RoundingMode
+import java.math.RoundingMode.HALF_DOWN
 
 fun main() {
     throw IllegalStateException("you sure?")
@@ -23,10 +24,11 @@ fun main() {
         .map { productCode(it.first) to it.second }
         .filter { (productCode, data) -> promotionalProducts.map { it.first }.contains(productCode) }
         .forEach { (productCode, data) ->
-            val (promoProductCode, originalPrice, discountPercentage) = promotionalProducts.first { it.first == productCode }
+            val (promoProductCode, priceFromFile, discountPercentage) = promotionalProducts.first { it.first == productCode }
 
             val variantNode = data.getArrayNode("variants")[0]
 
+            val originalPrice = variantNode.getStringValue("price")
             val newPrice = discount(originalPrice, discountPercentage)
             println("disc. $productCode from $originalPrice to $newPrice")
 
@@ -41,14 +43,14 @@ fun main() {
 
 private fun discount(value: String, percentage: String): String {
     val discount = value.toBigDecimal()
-        .multiply(percentage.toBigDecimal().multiply(BigDecimal("0.01")).setScale(2, HALF_UP))
-        .setScale(2, HALF_UP)
+        .multiply(percentage.toBigDecimal().multiply(BigDecimal("0.01")).setScale(2, RoundingMode.HALF_DOWN))
+        .setScale(2, HALF_DOWN)
 
     return BigDecimal(value).minus(discount).toPlainString()
 }
 
 private fun promotionalProducts(): Set<Triple<String, String, String>> =
-    readLines("promotional-prices-dec-2020.txt")
+    readLines("promotional-prices-jan-2021.txt")
         .drop(1)
         .map {
             val array = it.split(",")
