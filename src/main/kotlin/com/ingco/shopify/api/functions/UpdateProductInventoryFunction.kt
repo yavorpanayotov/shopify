@@ -9,7 +9,7 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 
-class UpdateProductInventoryFunction(val storeAddress: String, val apiCredentials: String) {
+class UpdateProductInventoryFunction(private val storeAddress: String, val apiCredentials: String) {
 
     fun apply(productCode: String, inventoryItemId: String, quantity: String) {
         val (request, response, result) = "https://$storeAddress/admin/api/2020-04/inventory_levels.json"

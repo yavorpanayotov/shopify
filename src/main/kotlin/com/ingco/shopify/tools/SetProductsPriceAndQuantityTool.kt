@@ -28,7 +28,7 @@ fun main() {
 
             val variantNode = data.getArrayNode("variants")[0]
 
-            Product(
+            P(
                 productCode,
                 variantNode.getStringValue("price"),
                 newPrice,
@@ -48,7 +48,7 @@ fun main() {
         }
 }
 
-data class Product(
+data class P(
     val productCode: String,
     val currentPrice: String,
     val newPrice: String?,
