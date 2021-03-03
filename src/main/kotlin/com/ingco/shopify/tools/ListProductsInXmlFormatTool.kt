@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import com.ingco.shopify.api.CollectionStore
+import com.ingco.shopify.api.InventoryStore
 import com.ingco.shopify.api.ProductStore
 import com.ingco.shopify.api.functions.GetProductCategoryFunction
 import com.ingco.shopify.api.functions.GetProductInventoryFunction
@@ -16,10 +18,8 @@ import kotlin.streams.toList
 
 fun main() {
     val productStore = ProductStore.init()
-
-    val config = loadConfig()
-    val getProductInventoryFunction = GetProductInventoryFunction(config[shopify.fullStoreUrl], config[shopify.apiCredentials])
-    val getProductCategoryFunction = GetProductCategoryFunction(config[shopify.fullStoreUrl], config[shopify.apiCredentials])
+    val collectionStore = CollectionStore.init()
+    val inventoryStore = InventoryStore.init(productStore.inventoryItemIds())
 
     val products: List<Product> = productStore.products()
         .map { it.getStringValue("handle") to it }
@@ -29,13 +29,13 @@ fun main() {
             val images = data.getArrayNode("images")
             val price = variant.getStringValue("price").toBigDecimal()
             val title = data.getStringValue("title")
+            val inventoryItemId = variant.getNumberValue("inventory_item_id").toLong()
+            val productId = variant.getNumberValue("product_id").toLong()
 
             val pictureUrls: List<String> =
                 (listOf(data.getNode("image").getStringValue("src")) +
                         images.stream().map { it.getStringValue("src") }.toList())
                     .distinct()
-
-            Thread.sleep(1000)
 
             Product(
                 title,
@@ -46,8 +46,8 @@ fun main() {
                 "BGN",
                 price,
                 "BGN",
-                getProductInventoryFunction.apply(variant.getNumberValue("inventory_item_id")) > 0,
-                getProductCategoryFunction.apply(variant.getNumberValue("product_id").toLong()),
+                inventoryStore.availableCount(inventoryItemId) > 0,
+                collectionStore.collectionFor(productId).toString(),
                 title,
                 data.getStringValue("body_html").replace(Regex("<.*?>\n?"), ""),
                 variant.getStringValue("price"),

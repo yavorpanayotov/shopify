@@ -9,8 +9,11 @@ import com.ingco.shopify.config.shopify
 class ProductStore(private val storeAddress: String, private val apiCredentials: String) {
 
     private lateinit var products: List<JsonNode>
+    private lateinit var inventoryItemIds: List<String>
 
     fun products(): List<JsonNode> = products
+
+    fun inventoryItemIds(): List<String> = inventoryItemIds
 
     fun size(): Int = products.size
 
@@ -38,6 +41,7 @@ class ProductStore(private val storeAddress: String, private val apiCredentials:
         val theRest = JdomParser().parse(result2.get()).getArrayNode("products")
 
         products = first250Products + theRest
+        inventoryItemIds = products.map { it.getArrayNode("variants")[0] }.map { it.getNumberValue("inventory_item_id")}
     }
 
     private fun headers(): Map<String, Any> =
