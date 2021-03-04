@@ -1,13 +1,16 @@
 package com.ingco.shopify.api
 
 import argo.jdom.JdomParser
+import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.result.Result
 import com.ingco.shopify.config.loadConfig
 import com.ingco.shopify.config.shopify
 
 class CollectionStore(private val storeAddress: String, private val apiCredentials: String) {
 
     private lateinit var productIdsToCollectionIds: List<Pair<Long, Long>>
+    private lateinit var collectionIdsToCollections: List<Pair<Long, String>>
 
     fun init() {
         val (_, response, result) = "https://$storeAddress/admin/api/2020-04/collects.json"
@@ -36,9 +39,24 @@ class CollectionStore(private val storeAddress: String, private val apiCredentia
             .map {
                 it.getNumberValue("product_id").toLong() to it.getNumberValue("collection_id").toLong()
             }
+
+        initCollectionIdsToCollections()
     }
 
-    fun collectionFor(productId: Long): Long = productIdsToCollectionIds.first { it.first == productId }.second
+    fun collectionFor(productId: Long): String {
+        val collectionId = productIdsToCollectionIds.first { it.first == productId }.second
+        return collectionIdsToCollections.first { it.first == collectionId }.second
+    }
+
+    private fun initCollectionIdsToCollections() {
+        val (_, _, result) = "https://ingco-bulgaria.myshopify.com/admin/api/2020-04/custom_collections.json"
+            .httpGet()
+            .header(headers())
+            .responseString()
+
+        collectionIdsToCollections = JdomParser().parse(result.get()).getArrayNode("custom_collections")
+            .map { it.getNumberValue("id").toLong() to it.getStringValue("title") }
+    }
 
     private fun headers(): Map<String, Any> =
         mapOf("Content-Type" to "application/json", "Authorization" to "Basic $apiCredentials=")

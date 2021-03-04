@@ -31,6 +31,7 @@ fun main() {
             val title = data.getStringValue("title")
             val inventoryItemId = variant.getNumberValue("inventory_item_id").toLong()
             val productId = variant.getNumberValue("product_id").toLong()
+            val bodyHtml = data.getStringValue("body_html")
 
             val pictureUrls: List<String> =
                 (listOf(data.getNode("image").getStringValue("src")) +
@@ -49,9 +50,10 @@ fun main() {
                 inventoryStore.availableCount(inventoryItemId) > 0,
                 collectionStore.collectionFor(productId).toString(),
                 title,
-                data.getStringValue("body_html").replace(Regex("<.*?>\n?"), ""),
+                bodyHtml.replace(Regex("<.*?>\n?"), ""),
                 variant.getStringValue("price"),
-                Pictures(pictureUrls.withIndex().map { Picture(it.value, it.index + 1) })
+                Pictures(pictureUrls.withIndex().map { Picture(it.value, it.index + 1) }),
+                Regex("""class="video-container".*?src="(.*?)\?rel=0"""").find(bodyHtml)?.groups?.get(1)?.value ?: ""
             )
         }
 
@@ -74,7 +76,8 @@ data class Product(
     val description: String,
     val full_description: String,
     val price: String,
-    val pictures: Pictures
+    val pictures: Pictures,
+    val video: String
 )
 
 @JacksonXmlRootElement(localName = "pictures")
