@@ -7,11 +7,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.ingco.shopify.api.CollectionStore
 import com.ingco.shopify.api.InventoryStore
 import com.ingco.shopify.api.ProductStore
-import com.ingco.shopify.api.functions.GetProductCategoryFunction
-import com.ingco.shopify.api.functions.GetProductInventoryFunction
 import com.ingco.shopify.api.productCode
-import com.ingco.shopify.config.loadConfig
-import com.ingco.shopify.config.shopify
+import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode.HALF_UP
 import kotlin.streams.toList
@@ -21,7 +18,7 @@ fun main() {
     val collectionStore = CollectionStore.init()
     val inventoryStore = InventoryStore.init(productStore.inventoryItemIds())
 
-    val products: List<Product> = productStore.products()
+    var products: List<Product> = productStore.products()
         .map { it.getStringValue("handle") to it }
         .map { productCode(it.first) to it.second }
         .map { (productCode, data) ->
@@ -57,9 +54,20 @@ fun main() {
             )
         }
 
+    val shoes = products.first { it.product_name == "ЗАЩИТНИ РАБОТНИ ОБУВКИ INGCO SSH12SB" }
+    products = products - shoes + listOf("40", "41", "42", "43", "44", "45")
+        .map { shoes.copy(size = it) }
+
+    val jacket = products.first { it.product_name == "ВОДОУСТОЙЧИВО И ВЕТРОУСТОЙЧИВО ДИШАЩО ЯКЕ INGCO HJATL2281" }
+    products = products - jacket + listOf("L", "XL")
+        .map { jacket.copy(size = it) }
+
     val xmlMapper = XmlMapper()
     xmlMapper.enable(SerializationFeature.INDENT_OUTPUT)
-    println(xmlMapper.writeValueAsString(Products(products)))
+    val output = xmlMapper.writeValueAsString(Products(products))
+
+    println(output)
+    File("products.xml").writeText("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n$output")
 }
 
 data class Product(
@@ -77,7 +85,8 @@ data class Product(
     val full_description: String,
     val price: String,
     val pictures: Pictures,
-    val video: String
+    val video: String,
+    val size: String? = null
 )
 
 @JacksonXmlRootElement(localName = "pictures")
